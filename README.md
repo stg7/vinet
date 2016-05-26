@@ -1,4 +1,4 @@
-traceview
+TraceView
 =========
 
 Traceview is a small tool for visualisation of different traceroute calls.
