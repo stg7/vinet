@@ -1,0 +1,11 @@
+src/build.hpp
+__pycache__
+.sconf_temp/
+.sconsign.dblite
+config.log
+tools
+libs/*
+*.o
+unittest
+test
+tmp/
