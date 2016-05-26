@@ -154,6 +154,8 @@ namespace traceview {
             GraphVisualizer() {
                 _filter = 0;
                 _light = false;
+
+                _graph.addEdge("A", "B");
             }
 
             virtual int init() {
