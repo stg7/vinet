@@ -9,3 +9,5 @@ libs/*
 unittest
 test
 tmp/
+tracer
+visualizer

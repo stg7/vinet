@@ -73,6 +73,7 @@ env.Append(
     CPPPATH=[libspath + x + "/build/include" for x in libs]
 )
 
+env.Append(LIBS = ['GL','GLU','SDL','SDL_image'])
 
 env.Append(LINKFLAGS=['-pthread',
         '-Wl,--rpath,' + libspath + 'boost/build/lib',
@@ -87,7 +88,13 @@ needed_libs = [
     'boost_program_options',
     'boost_system',
     'boost_filesystem',
-    'boost_iostreams']
+    'boost_iostreams',
+    'GL',
+    'GLU',
+    'SDL',
+    'SDL_image']
+env.ParseConfig('sdl-config --cflags --libs')
+
 
 for lib in needed_libs:
     if not conf.CheckLib(lib, language="c++"):
@@ -98,12 +105,10 @@ for lib in needed_libs:
 needed_headers = [
     'boost/program_options.hpp',
     'boost/filesystem.hpp',
-    'boost/iostreams/device/mapped_file.hpp',
-    'boost/iostreams/filter/gzip.hpp',
-    'boost/iostreams/filtering_stream.hpp',
-    'boost/network/protocol/http/server.hpp',
-    'boost/network/uri/decode.hpp',
-    'boost/test/unit_test.hpp'] #
+    'boost/test/unit_test.hpp',
+    'GL/gl.h',
+    'GL/glu.h',
+    'SDL.h'] #
 
 for header in needed_headers:
     if not conf.CheckCXXHeader(header):
@@ -132,7 +137,7 @@ else:
 testcases = set(glob.glob("src/tests/*.cpp"))
 
 header = set(glob.glob("src/*.hpp") +  glob.glob("src/*/*.hpp"))
-sources = set(glob.glob("src/*.cpp") + glob.glob("src/*/*.cpp")) - set(["src/main.cpp", "src/test.cpp", "src/tests/unittests.cpp"]) - testcases
+sources = set(glob.glob("src/*.cpp") + glob.glob("src/*/*.cpp")) - set(["src/tracer.cpp", "src/visualizer.cpp", "src/tests/unittests.cpp"]) - testcases
 
 #libs = glob.glob("libs/*/*.c")
 
@@ -140,8 +145,8 @@ sources = set(glob.glob("src/*.cpp") + glob.glob("src/*/*.cpp")) - set(["src/mai
 #env.StyleCheck("conventions", ["src/main.cpp"] + list(sources) + list(header) + list(testcases))
 
 
-phrasit = env.Program('phrasit', ["src/main.cpp"] + list(sources))
-test = env.Program('test', ["src/test.cpp"] + list(sources))
-unittest = env.Program('unittest', ["src/tests/unittests.cpp"] + list(sources))
+tracer = env.Program('tracer', ["src/tracer.cpp"] + list(sources))
+visualizer = env.Program('visualizer', ["src/visualizer.cpp"] + list(sources))
+#unittest = env.Program('unittest', ["src/tests/unittests.cpp"] + list(sources))
 
-Default(phrasit, test, unittest)
+Default(tracer, visualizer)#, unittest)
