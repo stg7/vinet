@@ -20,13 +20,16 @@ int main(int argc, const char* argv[]) {
 
     unsigned int num_threads = 0;
     std::string host_list = "";
+    std::string outfilename = "";
 
     // declare the supported options.
     po::options_description desc("tracer - ...\n\nSteve Göring 2016\nParameter");
     desc.add_options()
         ("help,h", "produce help message")
         ("hostlist,l", po::value<std::string>(&host_list)->required(), "list of all hosts that should be traced")
-        ("threads,t", po::value<unsigned int>(&num_threads)->default_value(std::thread::hardware_concurrency()), "number of trace-threads");
+        ("threads,t", po::value<unsigned int>(&num_threads)->default_value(std::thread::hardware_concurrency()), "number of trace-threads")
+        ("outfile,o", po::value<std::string>(&outfilename)->default_value("out.trace"), "output file for trace results")
+    ;
 
     po::variables_map vm;
     try {
@@ -69,7 +72,7 @@ int main(int argc, const char* argv[]) {
     }
     traceview::MultiThreadTracer mt(hosts, num_threads);
 
-    mt.start_trace();
+    mt.start_trace(outfilename);
 
 
     return 0;

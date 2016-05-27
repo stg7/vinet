@@ -121,10 +121,10 @@ namespace traceview {
             LOG("create MultiThreadTracer: " << _num_threads << " threads and prepare trace for " << _hosts.size() << " hosts.");
 
         }
-        void start_trace() {
+        void start_trace(const std::string& outfilename) {
             std::ofstream out;
 
-            out.open("out.trace");
+            out.open(outfilename.c_str());
 
             unsigned int start = 0;
             unsigned int hosts_size = static_cast<unsigned int>(_hosts.size());
@@ -133,17 +133,14 @@ namespace traceview {
 
             std::vector<std::thread> threads;
             for (unsigned int i = 0; i < parts; i++) {
-                auto do_trace = [](std::ofstream* out,const std::vector<std::string>& hosts, unsigned int start, unsigned int end) -> std::vector<std::shared_ptr<Tracer>> {
+                auto do_trace = [](std::ofstream* out, const std::vector<std::string>& hosts, unsigned int start, unsigned int end) {
                         // start tracing for hosts subset from start to end - 1
-                        std::vector<std::shared_ptr<Tracer>> tracers;
+                        Tracer t;
                         for (unsigned int i = start; i < end; i++) {
-                            std::shared_ptr<Tracer> t = std::make_shared<Tracer>();
-                            tracers.emplace_back(t);
-                            *out << t->trace(hosts[i]) << "\n";
+                            *out << t.trace(hosts[i]) << "\n";
                             (*out).flush();
                             LOG("done: " << hosts[i]);
                         }
-                        return tracers;
                     };
 
                 threads.emplace_back(std::thread(do_trace, &out, _hosts, start, std::min(start + step, hosts_size)));
