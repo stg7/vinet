@@ -48,6 +48,13 @@ int main(int argc, const char* argv[]) {
     }
 
     LOG("run with: " << num_threads << " and handle host list: " << host_list);
+    /*
+    {
+        traceview::Tracer t;
+        t.trace("wikipedia.org");
+        return 0;
+    }
+    */
 
     std::vector<std::string> hosts;
     {

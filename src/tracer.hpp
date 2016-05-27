@@ -15,6 +15,8 @@
 #include <thread>
 #include <future>
 
+#include "log.hpp"
+
 namespace traceview {
 
     std::string ssystem(const char* cmd) {
@@ -61,6 +63,25 @@ namespace traceview {
         }
         return res;
     }
+    /*
+    *   trim spaces from a string
+    *
+    *   \param s string for trimming
+    *   \return string s without leading/trailing spaces
+    */
+    inline std::string trim(const std::string& s) {
+        std::string::const_iterator it = s.begin();
+        while (it != s.end() && *it == ' ') {
+            it++;
+        }
+
+        std::string::const_reverse_iterator rit = s.rbegin();
+        while (rit.base() != it && *rit == ' ') {
+            rit++;
+        }
+
+        return std::string(it, rit.base());
+    }
 
     class Tracer {
      private:
@@ -70,20 +91,19 @@ namespace traceview {
             std::stringstream command;
             command << "traceroute -q 1 " << url;
             auto res = ssystem(command.str().c_str());
-            std::cout << res << std::endl;
             // todo(stg7) do some string parsing of output
             std::vector<std::string> path;
             unsigned int i = 0;
             for (auto& l: split(res, '\n')) {
                 if (i > 0) {
-                    auto parts = split(l, ' ');
-                    if (parts.size() >= 3) {
-                        path.emplace_back("\"" + parts[3] + "\"");
+                    auto parts = split(trim(l), ' ');
+                    if (parts.size() >= 2) {
+                        path.emplace_back("\"" + parts[2] + "\"");
                     }
                 }
                 i++;
             }
-            _res = "[" + join(path, ", ") + "]";
+            _res = "\"" + url + "\" : [" + join(path, ", ") + "]";
             return _res;
         }
 
@@ -91,7 +111,7 @@ namespace traceview {
             return _res;
         }
     };
-    class MultiThreadTracer{
+    class MultiThreadTracer {
      private:
         std::vector<std::string> _hosts;
         unsigned int _num_threads;
@@ -109,31 +129,30 @@ namespace traceview {
             unsigned int start = 0;
             unsigned int hosts_size = static_cast<unsigned int>(_hosts.size());
             unsigned int parts = std::min(_num_threads, hosts_size);
-            unsigned int size = _hosts.size() / parts;
+            unsigned int step = std::ceil((_hosts.size() + 0.0) / parts);
 
-            // todo(stg7) maybe use some smartpointer instead of *
-            std::vector<std::future<std::vector<std::shared_ptr<Tracer>>>> results;
-
-            for(unsigned int i = 0; i < parts; i++) {
-                results.emplace_back(std::async(
-                    [](std::ofstream* out,const std::vector<std::string>& hosts, unsigned int start, unsigned int end) -> std::vector<std::shared_ptr<Tracer>> {
+            std::vector<std::thread> threads;
+            for (unsigned int i = 0; i < parts; i++) {
+                auto do_trace = [](std::ofstream* out,const std::vector<std::string>& hosts, unsigned int start, unsigned int end) -> std::vector<std::shared_ptr<Tracer>> {
                         // start tracing for hosts subset from start to end - 1
                         std::vector<std::shared_ptr<Tracer>> tracers;
-                        for(unsigned int i = start; i < end; i++) {
+                        for (unsigned int i = start; i < end; i++) {
                             std::shared_ptr<Tracer> t = std::make_shared<Tracer>();
                             tracers.emplace_back(t);
                             *out << t->trace(hosts[i]) << "\n";
                             (*out).flush();
+                            LOG("done: " << hosts[i]);
                         }
                         return tracers;
-                    }, &out, _hosts, start, std::min(start + size, hosts_size)));
+                    };
 
-                start += size;
+                threads.emplace_back(std::thread(do_trace, &out, _hosts, start, std::min(start + step, hosts_size)));
+
+                start += step;
             }
-            for(auto& r : results) {
-                for(auto i : r.get()) {
-                    std::cout << i->get_result() << std::endl;
-                }
+
+            for (auto& t: threads) {
+                t.join();
             }
             out.close();
             LOG("done");
