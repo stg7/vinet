@@ -13,75 +13,12 @@
 #include <vector>
 #include <sstream>
 #include <thread>
-#include <future>
 
-#include "log.hpp"
+#include "utils/log.hpp"
+#include "utils/helper.hpp"
 
 namespace traceview {
 
-    std::string ssystem(const char* cmd) {
-        char buffer[128];
-        std::string result = "";
-        std::shared_ptr<FILE> pipe(popen(cmd, "r"), pclose);
-        if (!pipe)
-            throw std::runtime_error("popen() failed!");
-        while (!feof(pipe.get())) {
-            if (fgets(buffer, 128, pipe.get()) != NULL)
-                result += buffer;
-        }
-        return result;
-    }
-    // from phrasit/helper.hpp:
-    inline std::vector<std::string>& split(const std::string& s, char delim, std::vector<std::string>& elems) {
-        std::stringstream ss(s);
-        std::string item;
-        while (std::getline(ss, item, delim)) {
-            elems.emplace_back(item);
-        }
-        return elems;
-    }
-
-    /*
-    *   split a string by delimiter and return result in a vector of strings
-    *   \param s string to split
-    *   \param delim using this character as a delimiter
-    *   \return splitted strings as a vector
-    */
-    inline std::vector<std::string> split(const std::string& s, char delim) {
-        std::vector<std::string> elems;
-        split(s, delim, elems);
-        return elems;
-    }
-    inline std::string join(const std::vector<std::string> values, const std::string& connector) {
-        std::string res = "";
-
-        for (size_t i = 0; i < values.size(); i++) {
-            res += values[i];
-            if (i != values.size() - 1) {
-                res += connector;
-            }
-        }
-        return res;
-    }
-    /*
-    *   trim spaces from a string
-    *
-    *   \param s string for trimming
-    *   \return string s without leading/trailing spaces
-    */
-    inline std::string trim(const std::string& s) {
-        std::string::const_iterator it = s.begin();
-        while (it != s.end() && *it == ' ') {
-            it++;
-        }
-
-        std::string::const_reverse_iterator rit = s.rbegin();
-        while (rit.base() != it && *rit == ' ') {
-            rit++;
-        }
-
-        return std::string(it, rit.base());
-    }
 
     class Tracer {
      private:
@@ -90,20 +27,20 @@ namespace traceview {
         std::string trace(const std::string& url) {
             std::stringstream command;
             command << "traceroute -q 1 " << url;
-            auto res = ssystem(command.str().c_str());
+            auto res = helper::ssystem(command.str().c_str());
             // todo(stg7) do some string parsing of output
             std::vector<std::string> path;
             unsigned int i = 0;
-            for (auto& l: split(res, '\n')) {
+            for (auto& l: helper::split(res, '\n')) {
                 if (i > 0) {
-                    auto parts = split(trim(l), ' ');
+                    auto parts = helper::split(helper::trim(l), ' ');
                     if (parts.size() >= 2) {
                         path.emplace_back("\"" + parts[2] + "\"");
                     }
                 }
                 i++;
             }
-            _res = "\"" + url + "\" : [" + join(path, ", ") + "]";
+            _res = "\"" + url + "\" : [" + helper::join(path, ", ") + "]";
             return _res;
         }
 

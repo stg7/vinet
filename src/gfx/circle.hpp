@@ -9,6 +9,7 @@
 #include <GL/glu.h>
 #include <SDL.h>
 
+#include "utils/log.hpp"
 
 namespace traceview {
     namespace gfx {

@@ -28,7 +28,7 @@
 
 #include <boost/program_options.hpp>
 
-#include "log.hpp"
+#include "utils/log.hpp"
 #include "math/graph.hpp"
 #include "gfx/SDLWindow.hpp"
 #include "gfx/circle.hpp"

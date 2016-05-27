@@ -5,6 +5,8 @@
 #include <string>
 #include <map>
 
+#include "utils/log.hpp"
+
 namespace traceview {
     namespace math {
         class Graph {

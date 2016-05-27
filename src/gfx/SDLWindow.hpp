@@ -23,6 +23,7 @@
 #include <GL/glu.h>
 #include <SDL.h>
 
+#include "utils/log.hpp"
 
 GLfloat LightAmbient[]  = { 0.5f, 0.5f, 0.5f, 1.0f };
 GLfloat LightDiffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };

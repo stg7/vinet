@@ -7,7 +7,7 @@
 #include <boost/program_options.hpp>
 #include <boost/filesystem.hpp>
 
-#include "log.hpp"
+#include "utils/log.hpp"
 #include "build.hpp"
 #include "tracer.hpp"
 
