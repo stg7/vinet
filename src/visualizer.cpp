@@ -28,9 +28,7 @@
 
 #include <boost/program_options.hpp>
 
-#define LOG(x) std::cout << x << std::endl;
-#define ERR(x) std::cout << x << std::endl;
-
+#include "log.hpp"
 #include "math/graph.hpp"
 #include "gfx/SDLWindow.hpp"
 #include "gfx/circle.hpp"
