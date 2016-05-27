@@ -1,6 +1,8 @@
 #include <iostream>
 #include <thread>
 #include <string>
+#include <fstream>
+#include <vector>
 
 #include <boost/program_options.hpp>
 #include <boost/filesystem.hpp>
@@ -16,13 +18,15 @@ int main(int argc, const char* argv[]) {
     namespace po = boost::program_options;
     namespace fs = boost::filesystem;
 
-    unsigned int threads = 0;
+    unsigned int num_threads = 0;
+    std::string host_list = "";
+
     // declare the supported options.
     po::options_description desc("tracer - ...\n\nSteve Göring 2016\nParameter");
     desc.add_options()
         ("help,h", "produce help message")
-        ("hostlist,l", po::value<std::string>()->required(), "list of all hosts that should be traced")
-        ("threads,t", po::value<unsigned int>(&threads)->default_value(std::thread::hardware_concurrency()), "number of trace-threads");
+        ("hostlist,l", po::value<std::string>(&host_list)->required(), "list of all hosts that should be traced")
+        ("threads,t", po::value<unsigned int>(&num_threads)->default_value(std::thread::hardware_concurrency()), "number of trace-threads");
 
     po::variables_map vm;
     try {
@@ -37,18 +41,29 @@ int main(int argc, const char* argv[]) {
         std::cout << desc << std::endl;
         return -1;
     }
+    if (!fs::exists(host_list)) {
+        ERR(host_list << " does not exist.");
+        std::cout << desc << std::endl;
+        return -1;
+    }
 
-    std::string host_list = vm["hostlist"].as<std::string>();
+    LOG("run with: " << num_threads << " and handle host list: " << host_list);
 
-    LOG("run with: " << threads << " and handle host list: " << host_list);
+    std::vector<std::string> hosts;
+    {
+        std::ifstream f(host_list);
+        std::string line;
+        while (std::getline(f, line)) {
+            if (line != "") {
+                hosts.emplace_back(line);
+            }
+        }
 
+    }
+    traceview::MultiThreadTracer mt(hosts, num_threads);
 
-    traceview::Tracer t;
+    mt.start_trace();
 
-    // todo(stg7) read list of hosts from file, and start multiple threads for getting all traces
-    std::cout << "hello "
-        << t.trace("google.de")
-        << std::endl;
 
     return 0;
 }

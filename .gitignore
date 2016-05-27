@@ -11,3 +11,4 @@ test
 tmp/
 tracer
 visualizer
+out.trace
