@@ -49,6 +49,8 @@ int main(int argc, const char* argv[]) {
         std::cout << desc << std::endl;
         return -1;
     }
+    OUT("[version] " << version);
+    OUT("[branch]  " << branch);
 
     LOG("run with: " << num_threads << " and handle host list: " << host_list);
     /*

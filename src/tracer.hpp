@@ -56,7 +56,6 @@ namespace traceview {
      public:
         MultiThreadTracer(std::vector<std::string> hosts, unsigned int num_threads): _hosts(hosts), _num_threads(num_threads) {
             LOG("create MultiThreadTracer: " << _num_threads << " threads and prepare trace for " << _hosts.size() << " hosts.");
-
         }
         void start_trace(const std::string& outfilename) {
             std::ofstream out;
