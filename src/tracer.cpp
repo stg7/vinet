@@ -1,5 +1,6 @@
 #include <iostream>
 #include <thread>
+#include <string>
 
 #include <boost/program_options.hpp>
 #include <boost/filesystem.hpp>
