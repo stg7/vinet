@@ -144,7 +144,6 @@ namespace traceview {
                     };
 
                 threads.emplace_back(std::thread(do_trace, &out, _hosts, start, std::min(start + step, hosts_size)));
-
                 start += step;
             }
 
