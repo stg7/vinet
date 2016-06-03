@@ -49,7 +49,7 @@ private:
         /* Fetch the video info */
         const SDL_VideoInfo* videoInfo = SDL_GetVideoInfo();
 
-        if( !videoInfo) {
+        if (!videoInfo) {
             ERR("Video query failed " << SDL_GetError());
             return 0;
         }
@@ -65,16 +65,17 @@ private:
     }
 
     /* function to reset our viewport after a window resize */
-    int resizeWindow(int width, int height) {
+    bool resizeWindow(int width, int height) {
         /* Height / width ration */
-        GLfloat ratio;
+        //GLfloat ratio;
 
         /* Protect against a divide by zero */
+        /*
         if( height == 0)
             height = 1;
 
         ratio = width / (GLfloat) height;
-
+        */
         /* Setup our viewport. */
         glViewport(0, 0, (GLint) width, (GLint) height);
 
@@ -83,7 +84,8 @@ private:
         glLoadIdentity();
 
         /* Set our perspective */
-        gluPerspective(45.0f, ratio, 0.1f, 100.0f);
+        glOrtho(0, 800, 600, 0, 1, -1);
+        //        gluPerspective(45.0f, ratio, 0.1f, 100.0f);
 
         /* Make sure we're chaning the model view and not the projection */
         glMatrixMode(GL_MODELVIEW);
@@ -113,7 +115,7 @@ public:
     void initGL() {
 
         glShadeModel(GL_SMOOTH); // enable smooth shading
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // set the background black  FIXME: read from config
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
         glClearDepth(1.0f); // depth buffer setup
         glEnable(GL_DEPTH_TEST); // enables Depth Testing
@@ -126,6 +128,8 @@ public:
         glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);
         glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);
         glLightfv(GL_LIGHT1, GL_POSITION, LightPosition);
+
+        glEnable(GL_MULTISAMPLE);
 
         // enable light1
         glEnable(GL_LIGHT1);
@@ -146,6 +150,10 @@ public:
 
         // OpenGL double buffering
         SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+        // antialasing things
+        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+        SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 
         // get a SDL surface
         _surface = SDL_SetVideoMode(800, 600, 32, getVideoFlags());
@@ -155,6 +163,7 @@ public:
             ERR("ERROR: [SDL] surface allocation failed: " << SDL_GetError());
             return -1;
         }
+
 
         // initialize OpenGL
         initGL();

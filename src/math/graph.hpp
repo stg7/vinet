@@ -11,14 +11,14 @@ namespace traceview {
     namespace math {
         class Graph {
          private:
-            std::map<std::string, int> _nodes;
+            std::map<std::string, long> _nodes;
+            std::multimap<long, long> _edges;
 
-            // todo(stg7) use a multimap for edge storing
 
-            int addNode(const std::string& n) {
+            long add_node(const std::string& n) {
                 auto it = _nodes.find(n);
                 if (it == _nodes.end()) {
-                    _nodes.insert(std::pair<std::string, int>(n, _nodes.size()));
+                    _nodes.insert(std::pair<std::string, long>(n, _nodes.size()));
                 }
                 return _nodes[n];
             }
@@ -27,11 +27,24 @@ namespace traceview {
                 LOG("build graph");
             }
 
-            void addEdge(std::string n1, std::string n2) {
+            void add_edge(std::string n1, std::string n2) {
                 LOG("edge from: " << n1 << " to " << n2);
-                int i1 = addNode(n1);
-                int i2 = addNode(n2);
+                long i1 = add_node(n1);
+                long i2 = add_node(n2);
+                _edges.insert(std::pair<long, long>(i1, i2));
                 LOG("edge from: " << i1 << " to " << i2);
+            }
+
+            std::vector<long> get_nodes_ids() {
+                std::vector<long> res;
+                for (auto e: _nodes) {
+                    res.emplace_back(e.second);
+                }
+                return res;
+            }
+
+            auto get_edges() {
+                return _edges;
             }
 
         };

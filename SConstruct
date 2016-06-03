@@ -84,10 +84,10 @@ env.Decider('MD5')
 conf = Configure(env)
 
 needed_libs = [
+    'stdc++fs',
     'boost_unit_test_framework',
     'boost_program_options',
     'boost_system',
-    'boost_filesystem',
     'boost_iostreams',
     'GL',
     'GLU',
@@ -104,7 +104,6 @@ for lib in needed_libs:
 # TODO: do it automatically
 needed_headers = [
     'boost/program_options.hpp',
-    'boost/filesystem.hpp',
     'boost/test/unit_test.hpp',
     'GL/gl.h',
     'GL/glu.h',

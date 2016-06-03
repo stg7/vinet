@@ -3,9 +3,9 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <experimental/filesystem>
 
 #include <boost/program_options.hpp>
-#include <boost/filesystem.hpp>
 
 #include "utils/log.hpp"
 #include "build.hpp"
@@ -16,7 +16,7 @@
 **/
 int main(int argc, const char* argv[]) {
     namespace po = boost::program_options;
-    namespace fs = boost::filesystem;
+    namespace fs = std::experimental::filesystem;
 
     unsigned int num_threads = 0;
     std::string host_list = "";
@@ -53,13 +53,6 @@ int main(int argc, const char* argv[]) {
     OUT("[branch]  " << branch);
 
     LOG("run with: " << num_threads << " and handle host list: " << host_list);
-    /*
-    {
-        traceview::Tracer t;
-        t.trace("wikipedia.org");
-        return 0;
-    }
-    */
 
     std::vector<std::string> hosts;
     {
@@ -75,7 +68,6 @@ int main(int argc, const char* argv[]) {
     traceview::MultiThreadTracer mt(hosts, num_threads);
 
     mt.start_trace(outfilename);
-
 
     return 0;
 }

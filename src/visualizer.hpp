@@ -9,6 +9,10 @@
 #include "gfx/SDLWindow.hpp"
 #include "gfx/circle.hpp"
 #include "gfx/quad.hpp"
+#include "gfx/line.hpp"
+#include "gfx/vgraph.hpp"
+
+
 #include "build.hpp"
 #include "visualizer.hpp"
 
@@ -24,10 +28,12 @@ namespace traceview {
             GLfloat _yspeed = 0;    /* Y Rotation Speed */
             GLfloat _z = -30.0f; /* Depth Into The Screen */
 
+            math::Graph _graph;
             gfx::Circle _circle;
             gfx::Quad _quad;
+            gfx::Line _line;
 
-            math::Graph _graph;
+            gfx::VGraph _vgraph;
 
          protected:
             virtual void drawScene() {
@@ -37,18 +43,24 @@ namespace traceview {
                 /* Reset the view */
                 glLoadIdentity();
 
-                /* Translate Into/Out Of The Screen By z */
-                glTranslatef(0.0f, 0.0f, _z);
+                glTranslatef(0.0f, 0.0f, 0);
 
                 glRotatef(_xrot, 1.0f, 0.0f, 0.0f); /* Rotate On The X Axis By xrot */
                 glRotatef(_yrot, 0.0f, 1.0f, 0.0f); /* Rotate On The Y Axis By yrot */
 
-                glColor4f(0, 1, 0, 1);
-                for (int i = -10; i < 10; i += 2) {
-                    _circle.draw(i, 0, 1);
-                }
+                /*
+                glColor4f(1, 0, 0, 1);
+                _line.draw(100, 100, 300, 100);
 
+                glColor4f(0, 1, 0, 1);
+                for (int i = 100; i < 300; i += 40) {
+                    _circle.draw(i, 100, 20);
+                }
+                */
                 // _quad.draw(100, 100, 1);
+                glColor4f(0, 0, 1, 1);
+                _vgraph.draw();
+
 
                 _xrot += _xspeed; /* Add xspeed To xrot */
                 _yrot += _yspeed; /* Add yspeed To yrot */
@@ -67,6 +79,10 @@ namespace traceview {
                          ++_filter;
                         _filter %= 3;
                         break;
+                    case SDLK_r:
+                        _vgraph.init(800, 600, _graph);
+                        break;
+
                     case SDLK_l:
                         /* 'l' key was pressed
                          * this toggles the light
@@ -131,7 +147,13 @@ namespace traceview {
                 _filter = 0;
                 _light = false;
 
-                _graph.addEdge("A", "B");
+                _graph.add_edge("A", "B");
+                _graph.add_edge("A", "C");
+                _graph.add_edge("C", "D");
+                _graph.add_edge("D", "E");
+                _graph.add_edge("D", "F");
+
+                _vgraph.init(800, 600, _graph);
             }
 
             virtual int init() {

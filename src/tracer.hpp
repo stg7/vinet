@@ -28,7 +28,6 @@ namespace traceview {
             std::stringstream command;
             command << "traceroute -q 1 " << url;
             auto res = helper::ssystem(command.str().c_str());
-            // todo(stg7) do some string parsing of output
             std::vector<std::string> path;
             unsigned int i = 0;
             for (auto& l: helper::split(res, '\n')) {
@@ -82,7 +81,7 @@ namespace traceview {
                 threads.emplace_back(std::thread(do_trace, &out, _hosts, start, std::min(start + step, hosts_size)));
                 start += step;
             }
-
+            // wait for all threads
             for (auto& t: threads) {
                 t.join();
             }
