@@ -164,7 +164,6 @@ public:
             return -1;
         }
 
-
         // initialize OpenGL
         initGL();
 
@@ -221,6 +220,21 @@ public:
             }
             // frames done
         }
+    }
+    bool saveScreenshotBMP(const std::string filename) {
+        int w = 800;
+        int h = 600;
+        int x = 0;
+        int y = 0;
+        unsigned char* pixels = new unsigned char[w * h * 4]; // 4 bytes for RGBA
+        glReadPixels(x, y, w, h, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+
+        SDL_Surface* surf = SDL_CreateRGBSurfaceFrom(pixels, w, h, 8 * 4, w * 4, 0, 0, 0, 0);
+        SDL_SaveBMP(surf, filename.c_str());
+
+        SDL_FreeSurface(surf);
+        delete [] pixels;
+        return true;
     }
 
     void quit() {

@@ -42,7 +42,24 @@ namespace traceview {
                 }
                 return res;
             }
-
+            auto get_neighbor_nodes(long n) {
+                std::vector<long> res;
+                for (auto& e: _edges) {
+                    if (e.first == n) {
+                        res.emplace_back(e.second);
+                    }
+                }
+                return res;
+            }
+            auto get_neighbor_nodes_rev(long n) {
+                std::vector<long> res;
+                for (auto& e: _edges) {
+                    if (e.second == n) {
+                        res.emplace_back(e.first);
+                    }
+                }
+                return res;
+            }
             auto get_edges() {
                 return _edges;
             }

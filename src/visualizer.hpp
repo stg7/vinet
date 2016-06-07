@@ -58,7 +58,7 @@ namespace traceview {
                 }
                 */
                 // _quad.draw(100, 100, 1);
-                glColor4f(0, 0, 1, 1);
+
                 _vgraph.draw();
 
 
@@ -81,6 +81,12 @@ namespace traceview {
                         break;
                     case SDLK_r:
                         _vgraph.init(800, 600, _graph);
+                        break;
+                    case SDLK_s:
+                        saveScreenshotBMP("screen.bmp");
+                        break;
+                    case SDLK_u:
+                        _vgraph.dooIT();
                         break;
 
                     case SDLK_l:
