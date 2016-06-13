@@ -1,3 +1,29 @@
+/**
+    part of TraceView
+
+    \author stg7
+
+    \brief visualizer
+
+    \date 27.05.2016
+
+    Copyright 2016 Steve Göring
+
+    This file is part of TraceView.
+
+    TraceView is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    TraceView is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with TraceView.  If not, see <http://www.gnu.org/licenses/>.
+**/
 #include <iostream>
 #include <thread>
 #include <string>
@@ -23,7 +49,7 @@ int main(int argc, const char* argv[]) {
     std::string outfilename = "";
 
     // declare the supported options.
-    po::options_description desc("tracer - ...\n\nSteve Göring 2016\nParameter");
+    po::options_description desc("tracer - multithreaded tracetool\n\nSteve Göring 2016\nParameter");
     desc.add_options()
         ("help,h", "produce help message")
         ("hostlist,l", po::value<std::string>(&host_list)->required(), "list of all hosts that should be traced")

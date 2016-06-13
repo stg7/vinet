@@ -19,7 +19,10 @@
 
 namespace traceview {
 
-
+    /*
+        perform a trace
+        TODO(stg7): replace call to traceroute with own created tracing call
+    */
     class Tracer {
      private:
         std::string _res;
@@ -47,6 +50,10 @@ namespace traceview {
             return _res;
         }
     };
+
+    /*
+        handle a list of hosts and trace each in several threads
+    */
     class MultiThreadTracer {
      private:
         std::vector<std::string> _hosts;
@@ -54,8 +61,17 @@ namespace traceview {
 
      public:
         MultiThreadTracer(std::vector<std::string> hosts, unsigned int num_threads): _hosts(hosts), _num_threads(num_threads) {
-            LOG("create MultiThreadTracer: " << _num_threads << " threads and prepare trace for " << _hosts.size() << " hosts.");
+            LOG("create MultiThreadTracer: " << _num_threads << " threads and prepare trace for "
+                << _hosts.size() << " hosts.");
         }
+
+        /*
+            start a trace and store results line separated in `outfilename`
+
+            file format is:
+                each line is one trace and result is json encoded, e.g.
+                    "url" : ["host1", "host2", ...]
+        */
         void start_trace(const std::string& outfilename) {
             std::ofstream out;
 
@@ -68,7 +84,8 @@ namespace traceview {
 
             std::vector<std::thread> threads;
             for (unsigned int i = 0; i < parts; i++) {
-                auto do_trace = [](std::ofstream* out, const std::vector<std::string>& hosts, unsigned int start, unsigned int end) {
+                auto do_trace = [](std::ofstream* out, const std::vector<std::string>& hosts,
+                    unsigned int start, unsigned int end) {
                         // start tracing for hosts subset from start to end - 1
                         Tracer t;
                         for (unsigned int i = start; i < end; i++) {
@@ -78,7 +95,8 @@ namespace traceview {
                         }
                     };
 
-                threads.emplace_back(std::thread(do_trace, &out, _hosts, start, std::min(start + step, hosts_size)));
+                threads.emplace_back(std::thread(do_trace, &out, _hosts, start,
+                    std::min(start + step, hosts_size)));
                 start += step;
             }
             // wait for all threads

@@ -5,7 +5,7 @@
 
     \brief visualizer
 
-    \date 13.11.2015
+    \date 27.05.2016
 
     Copyright 2016 Steve Göring
 
