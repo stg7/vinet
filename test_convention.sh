@@ -1,20 +1,20 @@
 #!/bin/bash
 #   Script for style checking
 #
-#   This file is part of TraceView.
+#   This file is part of ViNet.
 #
-#   TraceView is free software: you can redistribute it and/or modify
+#   ViNet is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation, either version 3 of the License, or
 #   (at your option) any later version.
 #
-#   TraceView is distributed in the hope that it will be useful,
+#   ViNet is distributed in the hope that it will be useful,
 #   but WITHOUT ANY WARRANTY; without even the implied warranty of
 #   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #   GNU General Public License for more details.
 #
 #   You should have received a copy of the GNU General Public License
-#   along with TraceView.  If not, see <http://www.gnu.org/licenses/>.
+#   along with ViNet.  If not, see <http://www.gnu.org/licenses/>.
 
 cpplint() {
     python2 ./tools/cpplint.py "$@"

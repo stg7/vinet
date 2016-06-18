@@ -1,29 +1,30 @@
 /**
-    part of TraceView
+    part of ViNet
 
     \author stg7
 
-    \brief visualizer
+    \brief trace tool that runs multithreaded
 
     \date 27.05.2016
 
     Copyright 2016 Steve Göring
 
-    This file is part of TraceView.
+    This file is part of ViNet.
 
-    TraceView is free software: you can redistribute it and/or modify
+    ViNet is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    TraceView is distributed in the hope that it will be useful,
+    ViNet is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with TraceView.  If not, see <http://www.gnu.org/licenses/>.
+    along with ViNet.  If not, see <http://www.gnu.org/licenses/>.
 **/
+
 #include <iostream>
 #include <thread>
 #include <string>
@@ -38,7 +39,7 @@
 #include "tracer.hpp"
 
 /**
-    TraceView: command line tracetool
+    ViNet: command line tracetool
 **/
 int main(int argc, const char* argv[]) {
     namespace po = boost::program_options;
@@ -91,7 +92,7 @@ int main(int argc, const char* argv[]) {
         }
 
     }
-    traceview::MultiThreadTracer mt(hosts, num_threads);
+    vinet::MultiThreadTracer mt(hosts, num_threads);
 
     mt.start_trace(outfilename);
 

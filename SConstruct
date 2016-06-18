@@ -1,25 +1,25 @@
 # -*- coding: utf8 -*-
 """
-    part of traceview
+    part of ViNet
 
     author: Steve Göring
     contact: stg7@gmx.de
     2016
 
-    This file is part of TraceView.
+    This file is part of ViNet.
 
-    TraceView is free software: you can redistribute it and/or modify
+    ViNet is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    TraceView is distributed in the hope that it will be useful,
+    ViNet is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with TraceView.  If not, see <http://www.gnu.org/licenses/>.
+    along with ViNet.  If not, see <http://www.gnu.org/licenses/>.
 """
 import os
 import sys
@@ -131,14 +131,12 @@ else:
     # loop unrolling and link time optimization, options should be tested
     env.Append(CXXFLAGS=['-funroll-loops', '-flto', '-fwhole-program'])
 
-#env.Append(LINKFLAGS=['-Wl,--rpath,./libs/tbb/build/lib/'])
 
 testcases = set(glob.glob("src/tests/*.cpp"))
 
 header = set(glob.glob("src/*.hpp") +  glob.glob("src/*/*.hpp"))
 sources = set(glob.glob("src/*.cpp") + glob.glob("src/*/*.cpp")) - set(["src/tracer.cpp", "src/visualizer.cpp", "src/tests/unittests.cpp"]) - testcases
 
-#libs = glob.glob("libs/*/*.c")
 
 # check code conventions and build programm
 #env.StyleCheck("conventions", ["src/main.cpp"] + list(sources) + list(header) + list(testcases))

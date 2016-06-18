@@ -1,6 +1,32 @@
+/**
+    part of ViNet
 
-#ifndef TRACER_H
-#define TRACER_H
+    \author stg7
+
+    \brief opengl trace visualizer
+
+    \date 27.05.2016
+
+    Copyright 2016 Steve Göring
+
+    This file is part of ViNet.
+
+    ViNet is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    ViNet is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with ViNet.  If not, see <http://www.gnu.org/licenses/>.
+**/
+
+#ifndef VISUALIZER_H
+#define VISUALIZER_H
 
 #include <iostream>
 
@@ -16,9 +42,9 @@
 #include "build.hpp"
 #include "visualizer.hpp"
 
-namespace traceview {
+namespace vinet {
     namespace gui {
-        class GraphVisualizer : public SDLWindow {
+        class GraphVisualizer : public gfx::SDLWindow {
          private:
             int _light;
             int _filter;

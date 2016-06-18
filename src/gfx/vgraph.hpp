@@ -1,3 +1,30 @@
+/**
+    part of ViNet
+
+    \author stg7
+
+    \brief draw a graph with opengl using a spring embedding layout
+
+    \date 13.06.2016
+
+    Copyright 2016 Steve Göring
+
+    This file is part of ViNet.
+
+    ViNet is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    ViNet is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with ViNet.  If not, see <http://www.gnu.org/licenses/>.
+**/
+
 #ifndef GFX_VGRAPH_H
 #define GFX_VGRAPH_H
 
@@ -7,6 +34,7 @@
 #include <vector>
 #include <set>
 #include <cmath>
+#include <random>
 
 // opengl & sdl
 #include <GL/gl.h>
@@ -18,7 +46,7 @@
 #include "utils/log.hpp"
 #include "math/graph.hpp"
 
-namespace traceview {
+namespace vinet {
     namespace gfx {
         class VGraph {
          private:
